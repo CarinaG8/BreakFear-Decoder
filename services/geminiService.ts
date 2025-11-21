@@ -1,8 +1,6 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { DecoderResponse } from "../types";
 
-const apiKey = process.env.API_KEY;
-
 const responseSchema = {
   type: Type.OBJECT,
   properties: {
@@ -31,11 +29,8 @@ const responseSchema = {
 };
 
 export const decodeFear = async (fearInput: string): Promise<DecoderResponse> => {
-  if (!apiKey) {
-    throw new Error("API Key not found");
-  }
-
-  const ai = new GoogleGenAI({ apiKey });
+  // Initialize GoogleGenAI with API key from process.env.API_KEY as per guidelines.
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
   const systemPrompt = `
     You are Kayela Memory Core — the living memory of the Kayela ecosystem.
