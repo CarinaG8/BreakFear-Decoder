@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AppState, DecoderResponse, UserInfo } from '../types';
 import { decodeFear } from '../services/geminiService';
-import { ArrowRight, RefreshCcw, Lock, ShieldAlert, Zap, Infinity, Terminal, AlertTriangle } from 'lucide-react';
+import { ArrowRight, RefreshCcw, Lock, ShieldAlert, Zap, Infinity, Terminal, AlertTriangle, Copy, Check } from 'lucide-react';
 
 interface DecoderAppProps {
   setAppState: (state: AppState) => void;
@@ -24,6 +24,7 @@ export const DecoderApp: React.FC<DecoderAppProps> = ({ setAppState, userInfo })
   const [error, setError] = useState('');
   const [hasUsedFree, setHasUsedFree] = useState<boolean>(() => checkUsageHistory());
   const [placeholder, setPlaceholder] = useState('');
+  const [copied, setCopied] = useState(false);
   
   // Loading State Sequence
   const [loadingStep, setLoadingStep] = useState(0);
@@ -148,6 +149,14 @@ export const DecoderApp: React.FC<DecoderAppProps> = ({ setAppState, userInfo })
     }
   };
 
+  const handleCopy = () => {
+    if (!result) return;
+    const textToCopy = `BREAKFEAR DECODER\n\nINSIGHT: ${result.insight}\n\nDIRECTIVE: ${result.practicalTask}\n\nINQUIRY: ${result.followUpPrompt}`;
+    navigator.clipboard.writeText(textToCopy);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   const getStatusIndicator = () => {
     if (isPremium) {
       return (
@@ -204,7 +213,7 @@ export const DecoderApp: React.FC<DecoderAppProps> = ({ setAppState, userInfo })
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder={placeholder}
-                  className="w-full bg-black border border-white/10 text-gray-200 p-8 text-lg md:text-xl rounded-sm focus:outline-none focus:border-gold/40 focus:ring-1 focus:ring-gold/20 transition-all h-64 resize-none placeholder-gray-700 font-serif leading-relaxed"
+                  className="w-full bg-black border border-white/10 text-gray-200 p-8 text-lg md:text-xl rounded-sm focus:outline-none focus:border-gold/40 focus:ring-1 focus:ring-gold/20 transition-all h-64 md:h-80 resize-none placeholder-gray-700 font-serif leading-relaxed"
                   disabled={loading}
                   spellCheck={false}
                 />
@@ -281,11 +290,17 @@ export const DecoderApp: React.FC<DecoderAppProps> = ({ setAppState, userInfo })
           <div className="animate-fade-in space-y-8 pb-12">
             {/* Insight Card */}
             <div className="relative bg-charcoal/50 border-l-2 border-gold pl-8 py-6 pr-4 animate-slide-up" style={{animationDelay: '0.1s'}}>
-               <div className="absolute top-0 right-0 p-2 opacity-20">
-                   <Zap className="w-12 h-12 text-gold"/>
+               <div className="absolute top-0 right-0 p-2 flex gap-2">
+                   <button 
+                    onClick={handleCopy}
+                    className="p-2 text-gray-600 hover:text-gold transition-colors"
+                    title="Copy Transmission"
+                   >
+                     {copied ? <Check className="w-5 h-5 text-green-500" /> : <Copy className="w-5 h-5" />}
+                   </button>
                </div>
               <p className="text-[10px] uppercase tracking-[0.3em] text-gold mb-4 font-mono"> Lens: {result.philosophicalLens}</p>
-              <h3 className="text-2xl md:text-4xl font-serif text-gray-100 leading-relaxed tracking-tight">
+              <h3 className="text-2xl md:text-4xl font-serif text-gray-100 leading-relaxed tracking-tight pr-8">
                 "{result.insight}"
               </h3>
             </div>

@@ -85,7 +85,7 @@ export const decodeFear = async (fearInput: string): Promise<DecoderResponse> =>
         systemInstruction: systemPrompt,
         responseMimeType: "application/json",
         responseSchema: responseSchema,
-        temperature: 0.8, 
+        temperature: 1.0, // Increased for more "electric" creativity
       },
     });
 
