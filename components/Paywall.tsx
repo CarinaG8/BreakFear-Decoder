@@ -1,0 +1,93 @@
+import React from 'react';
+import { AppState, UserInfo } from '../types';
+import { Check, CreditCard, ArrowLeft, Lock } from 'lucide-react';
+
+interface PaywallProps {
+  setAppState: (state: AppState) => void;
+  userInfo?: UserInfo;
+}
+
+export const Paywall: React.FC<PaywallProps> = ({ setAppState, userInfo }) => {
+  
+  const handlePayment = () => {
+    // 1. Base Stripe Payment Link
+    let paymentUrl = "https://buy.stripe.com/3cI8wP0fv4WG6dfadG8Ra02";
+
+    // 2. UX Improvement: Pre-fill the email if we have it
+    // This prevents the user from having to type their email again on the Stripe page.
+    if (userInfo?.email) {
+      paymentUrl += `?prefilled_email=${encodeURIComponent(userInfo.email)}`;
+    }
+
+    // 3. Redirect
+    // Note: Ensure your Stripe Dashboard "Payment Link" settings are configured 
+    // to "Redirect to your website" after payment.
+    window.location.href = paymentUrl;
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 bg-obsidian/95 backdrop-blur-xl flex items-center justify-center p-4 animate-fade-in">
+      <div className="max-w-md w-full bg-charcoal border border-gold/30 p-8 relative overflow-hidden shadow-2xl shadow-gold/10">
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold to-transparent"></div>
+        
+        <div className="flex justify-center mb-6">
+             <div className="p-3 bg-gold/10 rounded-full border border-gold/20">
+                 <Lock className="w-6 h-6 text-gold" />
+             </div>
+        </div>
+
+        <h2 className="text-3xl font-serif text-center mb-2 text-white">The Gateway</h2>
+        <p className="text-center text-gray-500 mb-8 text-xs uppercase tracking-widest">Signal Limit Reached. Investment Required.</p>
+
+        <div className="space-y-6 mb-8 border-t border-b border-white/5 py-6">
+          <div className="flex items-start gap-4">
+            <div className="bg-gold/10 p-1 rounded-full mt-1">
+              <Check className="w-4 h-4 text-gold" />
+            </div>
+            <div>
+              <h4 className="text-white font-bold">Unlimited Decoding</h4>
+              <p className="text-sm text-gray-500">Access the synthetic mind anytime.</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-4">
+             <div className="bg-gold/10 p-1 rounded-full mt-1">
+              <Check className="w-4 h-4 text-gold" />
+            </div>
+            <div>
+              <h4 className="text-white font-bold">Monthly AMA</h4>
+              <p className="text-sm text-gray-500">Direct access to the creator and the inner circle.</p>
+            </div>
+          </div>
+           <div className="flex items-start gap-4">
+             <div className="bg-gold/10 p-1 rounded-full mt-1">
+              <Check className="w-4 h-4 text-gold" />
+            </div>
+            <div>
+              <h4 className="text-white font-bold">Community</h4>
+              <p className="text-sm text-gray-500">Join others on the path of expansion.</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="text-center mb-8">
+          <span className="text-4xl font-serif text-white">$88</span>
+          <span className="text-gray-500">/month</span>
+        </div>
+
+        <button 
+          onClick={handlePayment}
+          className="w-full py-4 bg-gold hover:bg-white hover:text-black text-black font-bold uppercase tracking-widest transition-all mb-4 flex items-center justify-center gap-2 shadow-lg shadow-gold/20"
+        >
+          <CreditCard className="w-4 h-4" /> Proceed to Payment
+        </button>
+        
+        <button 
+          onClick={() => setAppState(AppState.LANDING)}
+          className="w-full py-2 text-xs text-gray-600 hover:text-white uppercase tracking-widest flex items-center justify-center gap-2"
+        >
+          <ArrowLeft className="w-3 h-3" /> Return to Home
+        </button>
+      </div>
+    </div>
+  );
+};

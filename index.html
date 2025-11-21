@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Breakfear Decoder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              obsidian: '#050505', // Darker for contrast
+              charcoal: '#121212',
+              gold: '#D4AF37',
+              mist: '#a0a0a0',
+            },
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              serif: ['Playfair Display', 'serif'],
+              mono: ['Courier New', 'monospace'], // Added for terminal vibes
+            },
+            animation: {
+              'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'fade-in': 'fadeIn 0.8s ease-out forwards',
+              'slide-up': 'slideUp 0.6s ease-out forwards',
+              'drop': 'drop 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            },
+            keyframes: {
+              fadeIn: {
+                '0%': { opacity: '0' },
+                '100%': { opacity: '1' },
+              },
+              slideUp: {
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              drop: {
+                '0%': { top: '-100%' },
+                '100%': { top: '100%' },
+              }
+            }
+          },
+        },
+      };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script type="importmap">
+    {
+      "imports": {
+        "react": "https://aistudiocdn.com/react@^19.2.0",
+        "react/": "https://aistudiocdn.com/react@^19.2.0/",
+        "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+        "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
+        "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0"
+      }
+    }
+    </script>
+    <style>
+      /* CRT Scanline Effect */
+      body::before {
+        content: " ";
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background: linear-gradient(
+          to bottom,
+          rgba(18, 16, 16, 0) 50%,
+          rgba(0, 0, 0, 0.1) 50%
+        );
+        background-size: 100% 4px;
+        z-index: 9999;
+        pointer-events: none;
+        opacity: 0.6;
+      }
+      
+      /* Subtle vignette */
+      body::after {
+        content: " ";
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background: radial-gradient(circle, rgba(0,0,0,0) 60%, rgba(0,0,0,0.4) 100%);
+        z-index: 9998;
+        pointer-events: none;
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #0a0a0a; 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #333; 
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #D4AF37; 
+      }
+    </style>
+</head>
+  <body class="bg-obsidian text-white overflow-x-hidden antialiased">
+    <div id="root"></div>
+  </body>
+</html>
