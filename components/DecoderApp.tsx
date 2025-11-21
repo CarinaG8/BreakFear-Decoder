@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AppState, DecoderResponse, UserInfo } from '../types';
 import { decodeFear } from '../services/geminiService';
-import { ArrowRight, RefreshCcw, Lock, ShieldAlert, Zap, Infinity, Terminal, AlertTriangle, Copy, Check } from 'lucide-react';
+import { ArrowRight, RefreshCcw, Lock, ShieldAlert, Zap, Infinity, Terminal, AlertTriangle, Copy, Check, Share2 } from 'lucide-react';
 
 interface DecoderAppProps {
   setAppState: (state: AppState) => void;
@@ -151,10 +151,17 @@ export const DecoderApp: React.FC<DecoderAppProps> = ({ setAppState, userInfo })
 
   const handleCopy = () => {
     if (!result) return;
-    const textToCopy = `BREAKFEAR DECODER\n\nINSIGHT: ${result.insight}\n\nDIRECTIVE: ${result.practicalTask}\n\nINQUIRY: ${result.followUpPrompt}`;
+    const textToCopy = `BREAKFEAR DECODER\n\nINSIGHT: ${result.insight}\n\nDIRECTIVE: ${result.practicalTask}\n\nINQUIRY: ${result.followUpPrompt}\n\nDecode yours at: ${window.location.origin}`;
     navigator.clipboard.writeText(textToCopy);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleShare = () => {
+    if (!result) return;
+    const text = `I just asked the Breakfear Decoder to analyze my situation.\n\nResult: "${result.insight}"\n\nBrutal. Necessary.\n\nDecode yours here:`;
+    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(window.location.origin)}`;
+    window.open(url, '_blank');
   };
 
   const getStatusIndicator = () => {
@@ -291,6 +298,13 @@ export const DecoderApp: React.FC<DecoderAppProps> = ({ setAppState, userInfo })
             {/* Insight Card */}
             <div className="relative bg-charcoal/50 border-l-2 border-gold pl-8 py-6 pr-4 animate-slide-up" style={{animationDelay: '0.1s'}}>
                <div className="absolute top-0 right-0 p-2 flex gap-2">
+                   <button 
+                    onClick={handleShare}
+                    className="p-2 text-gray-600 hover:text-blue-400 transition-colors"
+                    title="Broadcast Signal"
+                   >
+                    <Share2 className="w-5 h-5" />
+                   </button>
                    <button 
                     onClick={handleCopy}
                     className="p-2 text-gray-600 hover:text-gold transition-colors"

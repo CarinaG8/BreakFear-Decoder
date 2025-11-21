@@ -3,11 +3,13 @@ import { LandingPage } from './components/LandingPage';
 import { Disclaimer } from './components/Disclaimer';
 import { DecoderApp } from './components/DecoderApp';
 import { Paywall } from './components/Paywall';
+import { WelcomeSequence } from './components/WelcomeSequence';
 import { AppState, UserInfo } from './types';
 
 const App: React.FC = () => {
   const [appState, setAppState] = useState<AppState>(AppState.LANDING);
   const [userInfo, setUserInfo] = useState<UserInfo | undefined>(undefined);
+  const [showWelcomeSequence, setShowWelcomeSequence] = useState(false);
 
   useEffect(() => {
     // 1. Check if user is returning from a successful payment
@@ -31,12 +33,15 @@ const App: React.FC = () => {
       if (savedUser) {
         savedUser = { ...savedUser, isPremium: true };
         setUserInfo(savedUser);
-        setAppState(AppState.DECODER);
       } else {
-        // If for some reason we lost the user data, send them to Disclaimer but mark as premium
-        setUserInfo({ name: 'Traveler', email: '', isPremium: true });
-        setAppState(AppState.DECODER);
+        // Fallback
+        setUserInfo({ name: 'Initiate', email: '', isPremium: true });
       }
+      
+      // Trigger the cinematic welcome sequence
+      setShowWelcomeSequence(true);
+      setAppState(AppState.DECODER);
+
     } else if (isPremiumStored && savedUser) {
       // Restore session if they reload page
       savedUser = { ...savedUser, isPremium: true };
@@ -53,7 +58,16 @@ const App: React.FC = () => {
     setAppState(AppState.DECODER);
   };
 
+  const handleWelcomeComplete = () => {
+    setShowWelcomeSequence(false);
+  };
+
   const renderContent = () => {
+    // If we are in the special welcome mode, override everything
+    if (showWelcomeSequence) {
+        return <WelcomeSequence userInfo={userInfo} onComplete={handleWelcomeComplete} />;
+    }
+
     switch (appState) {
       case AppState.LANDING:
         return <LandingPage onStart={() => setAppState(AppState.DISCLAIMER)} />;
