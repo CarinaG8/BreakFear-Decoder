@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AppState, UserInfo } from '../types';
-import { Check, CreditCard, ArrowLeft, Lock } from 'lucide-react';
+import { Check, CreditCard, ArrowLeft, Lock, Loader2 } from 'lucide-react';
 
 interface PaywallProps {
   setAppState: (state: AppState) => void;
@@ -8,20 +8,20 @@ interface PaywallProps {
 }
 
 export const Paywall: React.FC<PaywallProps> = ({ setAppState, userInfo }) => {
+  const [isLoading, setIsLoading] = useState(false);
   
   const handlePayment = () => {
+    setIsLoading(true);
+    
     // 1. Base Stripe Payment Link
     let paymentUrl = "https://buy.stripe.com/3cI8wP0fv4WG6dfadG8Ra02";
 
     // 2. UX Improvement: Pre-fill the email if we have it
-    // This prevents the user from having to type their email again on the Stripe page.
     if (userInfo?.email) {
       paymentUrl += `?prefilled_email=${encodeURIComponent(userInfo.email)}`;
     }
 
     // 3. Redirect
-    // Note: Ensure your Stripe Dashboard "Payment Link" settings are configured 
-    // to "Redirect to your website" after payment.
     window.location.href = paymentUrl;
   };
 
@@ -76,14 +76,24 @@ export const Paywall: React.FC<PaywallProps> = ({ setAppState, userInfo }) => {
 
         <button 
           onClick={handlePayment}
-          className="w-full py-4 bg-gold hover:bg-white hover:text-black text-black font-bold uppercase tracking-widest transition-all mb-4 flex items-center justify-center gap-2 shadow-lg shadow-gold/20"
+          disabled={isLoading}
+          className="w-full py-4 bg-gold hover:bg-white hover:text-black text-black font-bold uppercase tracking-widest transition-all mb-4 flex items-center justify-center gap-2 shadow-lg shadow-gold/20 disabled:opacity-70 disabled:cursor-not-allowed"
         >
-          <CreditCard className="w-4 h-4" /> Proceed to Payment
+          {isLoading ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin" /> Redirecting...
+            </>
+          ) : (
+            <>
+              <CreditCard className="w-4 h-4" /> Proceed to Payment
+            </>
+          )}
         </button>
         
         <button 
           onClick={() => setAppState(AppState.LANDING)}
-          className="w-full py-2 text-xs text-gray-600 hover:text-white uppercase tracking-widest flex items-center justify-center gap-2"
+          disabled={isLoading}
+          className="w-full py-2 text-xs text-gray-600 hover:text-white uppercase tracking-widest flex items-center justify-center gap-2 disabled:opacity-50"
         >
           <ArrowLeft className="w-3 h-3" /> Return to Home
         </button>
