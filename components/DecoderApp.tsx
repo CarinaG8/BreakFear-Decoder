@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AppState, DecoderResponse, UserInfo } from '../types';
 import { decodeFear } from '../services/geminiService';
-import { ArrowRight, RefreshCcw, Lock, ShieldAlert, Zap, Infinity, Terminal, AlertTriangle, Copy, Check, Share2 } from 'lucide-react';
+import { ArrowRight, RefreshCcw, Lock, ShieldAlert, Zap, Infinity, Terminal, AlertTriangle, Copy, Check, Share2, Users, Send } from 'lucide-react';
 
 interface DecoderAppProps {
   setAppState: (state: AppState) => void;
@@ -159,9 +159,15 @@ export const DecoderApp: React.FC<DecoderAppProps> = ({ setAppState, userInfo })
 
   const handleShare = () => {
     if (!result) return;
-    const text = `I just asked the Breakfear Decoder to analyze my situation.\n\nResult: "${result.insight}"\n\nBrutal. Necessary.\n\nDecode yours here:`;
+    // Viral Campaign Optimized Copy
+    const text = `My reality just got decoded by Breakfear.\n\nInsight: "${result.insight}"\n\nStop healing. Start deciding.\n\nTry the Protocol:`;
     const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(window.location.origin)}`;
     window.open(url, '_blank');
+  };
+
+  const handleCommunity = () => {
+    // Replace this with your specific Skool link
+    window.open('https://skool.com', '_blank'); 
   };
 
   const getStatusIndicator = () => {
@@ -190,10 +196,20 @@ export const DecoderApp: React.FC<DecoderAppProps> = ({ setAppState, userInfo })
     <div className="min-h-screen bg-obsidian flex flex-col items-center p-6 font-sans animate-fade-in relative z-10">
       
       {/* Header */}
-      <header className="w-full max-w-4xl flex justify-between items-center py-6 border-b border-white/10 mb-12">
-        <h1 className="text-lg font-serif font-bold tracking-widest text-white cursor-pointer hover:text-gold transition-colors" onClick={() => setAppState(AppState.LANDING)}>
-          BREAKFEAR
-        </h1>
+      <header className="w-full max-w-4xl flex flex-col md:flex-row justify-between items-center py-6 border-b border-white/10 mb-12 gap-4">
+        <div className="flex items-center gap-4">
+            <h1 className="text-lg font-serif font-bold tracking-widest text-white cursor-pointer hover:text-gold transition-colors" onClick={() => setAppState(AppState.LANDING)}>
+            BREAKFEAR
+            </h1>
+            {isPremium && (
+                <button 
+                    onClick={handleCommunity}
+                    className="flex items-center gap-2 text-[10px] uppercase tracking-widest px-3 py-1 rounded-sm border border-gold/40 bg-gold/10 hover:bg-gold hover:text-black text-gold transition-all shadow-[0_0_10px_rgba(212,175,55,0.1)]"
+                >
+                    <Users className="w-3 h-3" /> Access Protocol
+                </button>
+            )}
+        </div>
         <div className="flex items-center gap-4">
             {userInfo && (
                 <span className="text-[10px] text-gray-600 hidden md:inline-block uppercase tracking-widest font-mono">Sub: {userInfo.name}</span>
@@ -299,13 +315,6 @@ export const DecoderApp: React.FC<DecoderAppProps> = ({ setAppState, userInfo })
             <div className="relative bg-charcoal/50 border-l-2 border-gold pl-8 py-6 pr-4 animate-slide-up" style={{animationDelay: '0.1s'}}>
                <div className="absolute top-0 right-0 p-2 flex gap-2">
                    <button 
-                    onClick={handleShare}
-                    className="p-2 text-gray-600 hover:text-blue-400 transition-colors"
-                    title="Broadcast Signal"
-                   >
-                    <Share2 className="w-5 h-5" />
-                   </button>
-                   <button 
                     onClick={handleCopy}
                     className="p-2 text-gray-600 hover:text-gold transition-colors"
                     title="Copy Transmission"
@@ -317,6 +326,14 @@ export const DecoderApp: React.FC<DecoderAppProps> = ({ setAppState, userInfo })
               <h3 className="text-2xl md:text-4xl font-serif text-gray-100 leading-relaxed tracking-tight pr-8">
                 "{result.insight}"
               </h3>
+              
+              {/* Viral Share Button Integrated into Card */}
+              <button 
+                onClick={handleShare}
+                className="mt-6 flex items-center gap-2 text-[10px] uppercase tracking-widest text-gray-500 hover:text-blue-400 transition-colors border border-white/10 hover:border-blue-400/50 px-4 py-2 rounded-sm"
+              >
+                <Share2 className="w-3 h-3" /> Broadcast Truth
+              </button>
             </div>
 
             <div className="grid md:grid-cols-2 gap-6 mt-12">

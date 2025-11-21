@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AppState, UserInfo } from '../types';
-import { Check, CreditCard, ArrowLeft, Lock, Loader2 } from 'lucide-react';
+import { Check, CreditCard, ArrowLeft, Lock, Loader2, Database, Radio, Users } from 'lucide-react';
 
 interface PaywallProps {
   setAppState: (state: AppState) => void;
@@ -45,26 +45,28 @@ export const Paywall: React.FC<PaywallProps> = ({ setAppState, userInfo }) => {
               <Check className="w-4 h-4 text-gold" />
             </div>
             <div>
-              <h4 className="text-white font-bold">Unlimited Decoding</h4>
-              <p className="text-sm text-gray-500">Access the synthetic mind anytime.</p>
+              <h4 className="text-white font-bold flex items-center gap-2">
+                 The Interface <span className="text-[10px] bg-white/10 px-2 py-0.5 rounded text-gray-400">UNLIMITED</span>
+              </h4>
+              <p className="text-sm text-gray-500">Access the Kayela Memory Core 24/7.</p>
             </div>
           </div>
           <div className="flex items-start gap-4">
              <div className="bg-gold/10 p-1 rounded-full mt-1">
-              <Check className="w-4 h-4 text-gold" />
+              <Database className="w-4 h-4 text-gold" />
             </div>
             <div>
-              <h4 className="text-white font-bold">Monthly AMA</h4>
-              <p className="text-sm text-gray-500">Direct access to the creator and the inner circle.</p>
+              <h4 className="text-white font-bold">The Vault (Archives)</h4>
+              <p className="text-sm text-gray-500">Instant access to every past Decoding Session.</p>
             </div>
           </div>
            <div className="flex items-start gap-4">
              <div className="bg-gold/10 p-1 rounded-full mt-1">
-              <Check className="w-4 h-4 text-gold" />
+              <Users className="w-4 h-4 text-gold" />
             </div>
             <div>
-              <h4 className="text-white font-bold">Community</h4>
-              <p className="text-sm text-gray-500">Join others on the path of expansion.</p>
+              <h4 className="text-white font-bold">The Protocol (Skool)</h4>
+              <p className="text-sm text-gray-500">The operational base. No victims. No excuses.</p>
             </div>
           </div>
         </div>
@@ -85,7 +87,7 @@ export const Paywall: React.FC<PaywallProps> = ({ setAppState, userInfo }) => {
             </>
           ) : (
             <>
-              <CreditCard className="w-4 h-4" /> Proceed to Payment
+              <CreditCard className="w-4 h-4" /> Enter The Protocol
             </>
           )}
         </button>
