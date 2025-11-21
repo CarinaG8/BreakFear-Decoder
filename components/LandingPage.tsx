@@ -195,7 +195,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
                 <span className="text-gold">✓</span> Unlimited Decoder Access
             </li>
             <li className="flex items-center gap-4 text-sm text-gray-300">
-                <span className="text-gold">✓</span> Monthly AMA with Creator
+                <span className="text-gold">✓</span> Monthly Live Transmission (1st Thu @ 0900 PST)
             </li>
             <li className="flex items-center gap-4 text-sm text-gray-300">
                 <span className="text-gold">✓</span> Access to The Breakfear Protocol

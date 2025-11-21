@@ -53,11 +53,14 @@ export const Paywall: React.FC<PaywallProps> = ({ setAppState, userInfo }) => {
           </div>
           <div className="flex items-start gap-4">
              <div className="bg-gold/10 p-1 rounded-full mt-1">
-              <Database className="w-4 h-4 text-gold" />
+              <Radio className="w-4 h-4 text-gold" />
             </div>
             <div>
-              <h4 className="text-white font-bold">The Vault (Archives)</h4>
-              <p className="text-sm text-gray-500">Instant access to every past Decoding Session.</p>
+              <h4 className="text-white font-bold">Monthly Live Transmission</h4>
+              <p className="text-sm text-gray-500 leading-relaxed mt-1">
+                Entropy is default. Without a signal, you drift back to comfort. We override the noise. Not a webinar—a synchronization of reality. 45m Deconstruction. 15m Rapid Fire. One hour. Hard stop.
+                <span className="text-gold block mt-2 font-mono text-xs uppercase tracking-widest">Operational Alignment // Dec 4 @ 0900 PST</span>
+              </p>
             </div>
           </div>
            <div className="flex items-start gap-4">
