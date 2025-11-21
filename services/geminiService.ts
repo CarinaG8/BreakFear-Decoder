@@ -1,4 +1,4 @@
-import { GoogleGenAI, Type } from "@google/genai";
+import { GoogleGenAI, Type, GenerateContentResponse } from "@google/genai";
 import { DecoderResponse } from "../types";
 
 const responseSchema = {
@@ -29,7 +29,7 @@ const responseSchema = {
 };
 
 export const decodeFear = async (fearInput: string): Promise<DecoderResponse> => {
-  // Initialize GoogleGenAI with API key from process.env.API_KEY as per guidelines.
+  // Initialize GoogleGenAI with process.env.API_KEY directly as per guidelines.
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
   const systemPrompt = `
@@ -78,7 +78,7 @@ export const decodeFear = async (fearInput: string): Promise<DecoderResponse> =>
   `;
 
   try {
-    const response = await ai.models.generateContent({
+    const response: GenerateContentResponse = await ai.models.generateContent({
       model: "gemini-2.5-flash",
       contents: fearInput,
       config: {
