@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowRight, ShieldAlert, Loader2, Lock, FileText, AlertTriangle } from 'lucide-react';
+import { ArrowRight, Loader2, Lock, FileText, AlertTriangle } from 'lucide-react';
 import { UserInfo } from '../types';
 import { saveUserToExternalStorage } from '../services/storageService';
 
@@ -11,7 +11,8 @@ interface DisclaimerProps {
 export const Disclaimer: React.FC<DisclaimerProps> = ({ onConfirm, onBack }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [agreed, setAgreed] = useState(false);
+  const [agreedTerms, setAgreedTerms] = useState(false);
+  const [agreedSafety, setAgreedSafety] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [usageError, setUsageError] = useState(false);
 
@@ -35,7 +36,7 @@ export const Disclaimer: React.FC<DisclaimerProps> = ({ onConfirm, onBack }) => 
       return;
     }
 
-    if (agreed && name && email && !isSubmitting) {
+    if (agreedTerms && agreedSafety && name && email && !isSubmitting) {
       setIsSubmitting(true);
       
       try {
@@ -158,31 +159,49 @@ export const Disclaimer: React.FC<DisclaimerProps> = ({ onConfirm, onBack }) => 
                 </div>
             </div>
 
-            <div className="pt-2">
+            <div className="space-y-3 pt-2">
+              {/* Checkbox 1: Age & Terms */}
               <label className="flex items-start gap-3 cursor-pointer group p-2 hover:bg-white/5 transition-colors rounded-sm">
-                <div className={`w-5 h-5 border border-white/30 flex items-center justify-center transition-colors mt-0.5 shrink-0 ${agreed ? 'bg-gold border-gold' : 'group-hover:border-white'}`}>
-                  {agreed && <span className="text-black text-xs font-bold">✓</span>}
+                <div className={`w-5 h-5 border border-white/30 flex items-center justify-center transition-colors mt-0.5 shrink-0 ${agreedTerms ? 'bg-gold border-gold' : 'group-hover:border-white'}`}>
+                  {agreedTerms && <span className="text-black text-xs font-bold">✓</span>}
                 </div>
                 <input 
                   type="checkbox" 
                   className="hidden"
-                  checked={agreed}
-                  onChange={(e) => setAgreed(e.target.checked)}
+                  checked={agreedTerms}
+                  onChange={(e) => setAgreedTerms(e.target.checked)}
                   disabled={isSubmitting}
                 />
                 <span className="text-xs text-gray-400 select-none leading-relaxed">
-                  I certify I am 18+ and I have read and agree to the <span className="text-gray-300">Terms of Protocol</span>, <span className="text-gray-300">Liability Waiver</span>, and <span className="text-gray-300">Safety Notice</span> above.
+                  I certify I am 18+ and I have read the <span className="text-gray-300">Terms of Protocol</span>.
+                </span>
+              </label>
+
+              {/* Checkbox 2: Safety/Emergency Protocol */}
+              <label className="flex items-start gap-3 cursor-pointer group p-2 hover:bg-red-900/10 transition-colors rounded-sm">
+                <div className={`w-5 h-5 border border-white/30 flex items-center justify-center transition-colors mt-0.5 shrink-0 ${agreedSafety ? 'bg-red-500 border-red-500' : 'group-hover:border-red-400'}`}>
+                  {agreedSafety && <span className="text-white text-xs font-bold">✓</span>}
+                </div>
+                <input 
+                  type="checkbox" 
+                  className="hidden"
+                  checked={agreedSafety}
+                  onChange={(e) => setAgreedSafety(e.target.checked)}
+                  disabled={isSubmitting}
+                />
+                <span className="text-xs text-gray-400 select-none leading-relaxed">
+                  I understand this is <span className="text-red-400 font-bold">NOT</span> an emergency service. If I am in crisis, I will call 911 or 988.
                 </span>
               </label>
             </div>
 
             <button 
               type="submit"
-              disabled={(!agreed || !name || !email) && !usageError}
+              disabled={(!agreedTerms || !agreedSafety || !name || !email) && !usageError}
               className={`w-full py-4 font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-2 shadow-lg
                 ${usageError 
                     ? 'bg-gold text-black hover:bg-white' 
-                    : (agreed && name && email && !isSubmitting) ? 'bg-white text-black hover:bg-gold' : 'bg-gray-800 text-gray-500 cursor-not-allowed'
+                    : (agreedTerms && agreedSafety && name && email && !isSubmitting) ? 'bg-white text-black hover:bg-gold' : 'bg-gray-800 text-gray-500 cursor-not-allowed'
                 }`}
             >
               {isSubmitting ? (
