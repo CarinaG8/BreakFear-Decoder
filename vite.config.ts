@@ -8,7 +8,8 @@ export default defineConfig(({ mode }) => {
     define: {
       // This ensures 'process.env.API_KEY' in the code is replaced 
       // with the actual string value from Netlify environment variables.
-      'process.env.API_KEY': JSON.stringify(env.API_KEY),
+      // We use a fallback empty string to prevent build errors if the key is missing.
+      'process.env.API_KEY': JSON.stringify(env.API_KEY || ''),
     },
   };
 });

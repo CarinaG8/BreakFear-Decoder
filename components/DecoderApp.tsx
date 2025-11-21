@@ -252,14 +252,14 @@ export const DecoderApp: React.FC<DecoderAppProps> = ({ setAppState, userInfo })
                     onClick={handleCommunity}
                     className="flex items-center gap-2 text-[10px] uppercase tracking-widest px-3 py-1 rounded-sm border border-gold/40 bg-gold/10 hover:bg-gold hover:text-black text-gold transition-all shadow-[0_0_10px_rgba(212,175,55,0.1)]"
                 >
-                    <Users className="w-3 h-3" /> Access Protocol
+                    <Users className="w-3 h-3" /> Access Community
                 </button>
             ) : (
                 <button 
                     onClick={() => setAppState(AppState.PAYWALL)}
-                    className="flex items-center gap-2 text-[10px] uppercase tracking-widest px-3 py-1 rounded-sm border border-white/10 bg-white/5 text-gray-500 hover:border-gold/30 hover:text-gray-300 transition-all"
+                    className="flex items-center gap-2 text-[10px] uppercase tracking-widest px-3 py-1 rounded-sm border border-white/10 bg-white/5 text-gray-500 hover:border-gold/30 hover:text-gray-300 transition-all group"
                 >
-                    <Lock className="w-3 h-3" /> Protocol Locked
+                    <Lock className="w-3 h-3 group-hover:text-gold" /> Community Locked
                 </button>
             )}
         </div>

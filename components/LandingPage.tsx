@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Brain, Zap, ShieldCheck, Eye, ChevronDown, Terminal } from 'lucide-react';
+import { Brain, Zap, ShieldCheck, Eye, ChevronDown, Terminal, Unlock } from 'lucide-react';
 import { Section } from './ui/Section';
 
 interface LandingPageProps {
@@ -8,6 +8,8 @@ interface LandingPageProps {
 
 export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
   const [bootLog, setBootLog] = useState("INITIALIZING...");
+  const [secretClickCount, setSecretClickCount] = useState(0);
+  const [overrideActive, setOverrideActive] = useState(false);
   
   const frameworks = [
     { 
@@ -51,6 +53,21 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
     return () => clearInterval(interval);
   }, []);
 
+  const handleSecretClick = () => {
+    const newCount = secretClickCount + 1;
+    setSecretClickCount(newCount);
+
+    if (newCount >= 5) {
+      setOverrideActive(true);
+      localStorage.setItem('breakfear_is_premium', 'true');
+      
+      // Visual feedback before reload
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-obsidian text-gray-200 font-sans selection:bg-gold selection:text-black animate-fade-in relative">
       
@@ -68,8 +85,19 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-charcoal/80 via-obsidian/95 to-black opacity-90 -z-10"></div>
         
         <div className="flex-1 flex flex-col justify-center items-center w-full px-4 z-10">
-            <div className="mb-6 border border-gold/20 px-4 py-1 rounded-full bg-gold/5 backdrop-blur-sm animate-slide-up">
-                <span className="text-[10px] uppercase tracking-[0.3em] text-gold font-mono">System Status: Operational</span>
+            <div 
+                onClick={handleSecretClick}
+                className={`mb-6 border px-4 py-1 rounded-full backdrop-blur-sm animate-slide-up cursor-pointer select-none transition-all duration-300 ${overrideActive ? 'bg-green-900/20 border-green-500' : 'bg-gold/5 border-gold/20 hover:bg-gold/10'}`}
+            >
+                <span className={`text-[10px] uppercase tracking-[0.3em] font-mono flex items-center gap-2 ${overrideActive ? 'text-green-400' : 'text-gold'}`}>
+                    {overrideActive ? (
+                        <>
+                            <Unlock className="w-3 h-3" /> SIGNAL OVERRIDE ACCEPTED
+                        </>
+                    ) : (
+                        "System Status: Operational"
+                    )}
+                </span>
             </div>
 
             <h1 className="text-5xl md:text-9xl font-serif font-bold text-transparent bg-clip-text bg-gradient-to-b from-white via-gray-200 to-gray-600 mb-8 tracking-tighter animate-slide-up relative">

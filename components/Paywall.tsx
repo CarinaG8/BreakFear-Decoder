@@ -9,6 +9,7 @@ interface PaywallProps {
 
 export const Paywall: React.FC<PaywallProps> = ({ setAppState, userInfo }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [secretClickCount, setSecretClickCount] = useState(0);
   
   const handlePayment = () => {
     setIsLoading(true);
@@ -23,6 +24,21 @@ export const Paywall: React.FC<PaywallProps> = ({ setAppState, userInfo }) => {
 
     // 3. Redirect
     window.location.href = paymentUrl;
+  };
+
+  // Allow unlocking from Paywall screen too for ease of testing
+  const handleReturnClick = () => {
+    const newCount = secretClickCount + 1;
+    setSecretClickCount(newCount);
+
+    if (newCount >= 5) {
+       // Override
+       localStorage.setItem('breakfear_is_premium', 'true');
+       window.location.reload();
+       return;
+    }
+
+    setAppState(AppState.LANDING);
   };
 
   return (
@@ -96,7 +112,7 @@ export const Paywall: React.FC<PaywallProps> = ({ setAppState, userInfo }) => {
         </button>
         
         <button 
-          onClick={() => setAppState(AppState.LANDING)}
+          onClick={handleReturnClick}
           disabled={isLoading}
           className="w-full py-2 text-xs text-gray-600 hover:text-white uppercase tracking-widest flex items-center justify-center gap-2 disabled:opacity-50"
         >
