@@ -52,15 +52,30 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-obsidian text-gray-200 font-sans selection:bg-gold selection:text-black animate-fade-in">
+    <div className="min-h-screen bg-obsidian text-gray-200 font-sans selection:bg-gold selection:text-black animate-fade-in relative">
+      
+      {/* Global Technical Grid Background */}
+      <div className="fixed inset-0 z-0 opacity-20 pointer-events-none" 
+           style={{ 
+             backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)', 
+             backgroundSize: '50px 50px' 
+           }}>
+      </div>
+
       {/* Hero */}
-      <header className="relative min-h-[95vh] flex flex-col justify-center items-center text-center border-b border-white/10 overflow-hidden">
-        {/* Background Texture */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-charcoal via-obsidian to-black opacity-80 -z-10"></div>
+      <header className="relative min-h-[95vh] flex flex-col justify-center items-center text-center border-b border-white/10 overflow-hidden z-10">
+        {/* Radial Gradient Overlay */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-charcoal/80 via-obsidian/95 to-black opacity-90 -z-10"></div>
         
         <div className="flex-1 flex flex-col justify-center items-center w-full px-4 z-10">
-            <h1 className="text-5xl md:text-9xl font-serif font-bold text-transparent bg-clip-text bg-gradient-to-b from-white via-gray-200 to-gray-600 mb-8 tracking-tighter animate-slide-up">
-            BREAKFEAR<br/><span className="text-gold/90 italic text-4xl md:text-7xl">DECODER</span>
+            <div className="mb-6 border border-gold/20 px-4 py-1 rounded-full bg-gold/5 backdrop-blur-sm animate-slide-up">
+                <span className="text-[10px] uppercase tracking-[0.3em] text-gold font-mono">System Status: Operational</span>
+            </div>
+
+            <h1 className="text-5xl md:text-9xl font-serif font-bold text-transparent bg-clip-text bg-gradient-to-b from-white via-gray-200 to-gray-600 mb-8 tracking-tighter animate-slide-up relative">
+            BREAKFEAR<br/><span className="text-gold/90 italic text-4xl md:text-7xl relative z-10">DECODER</span>
+            {/* Subtle Glow behind title */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-32 bg-gold/10 blur-[100px] -z-10 rounded-full"></div>
             </h1>
             
             <p className="text-lg md:text-xl text-mist max-w-xl mx-auto mb-12 font-light leading-relaxed px-4 animate-slide-up" style={{animationDelay: '0.2s'}}>
@@ -95,7 +110,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
       </header>
 
       {/* The Problem with LLMs */}
-      <Section className="grid md:grid-cols-2 gap-16 items-center">
+      <Section className="grid md:grid-cols-2 gap-16 items-center relative z-10">
         <div className="order-2 md:order-1">
           <h2 className="text-3xl font-serif mb-8 text-white leading-tight">Most "Advice" is <br/><span className="text-gray-500 italic">Comfort in Disguise.</span></h2>
           <p className="text-mist text-lg mb-6 leading-relaxed">
@@ -105,7 +120,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
             <strong className="text-gold">The Breakfear Decoder</strong> is designed to be disagreeable. It doesn't care about your feelings; it cares about your freedom. It synthesizes radical philosophical frameworks to dismantle the logic of your fear.
           </p>
         </div>
-        <div className="order-1 md:order-2 bg-charcoal/30 p-8 border border-white/5 backdrop-blur-sm">
+        <div className="order-1 md:order-2 bg-charcoal/30 p-8 border border-white/5 backdrop-blur-sm shadow-2xl">
           <ul className="space-y-8">
             <li className="flex items-start gap-5 opacity-50 blur-[1px] hover:blur-0 hover:opacity-100 transition-all duration-500">
               <div className="p-3 bg-white/5 rounded-full"><Brain className="text-gray-400 w-6 h-6" /></div>
@@ -126,7 +141,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
       </Section>
 
       {/* Methodology */}
-      <Section className="border-t border-white/5">
+      <Section className="border-t border-white/5 relative z-10">
         <div className="text-center mb-16">
            <h2 className="text-4xl md:text-5xl font-serif mb-6 text-white">The Architecture</h2>
            <p className="text-mist max-w-2xl mx-auto">Built on centuries of radical thought, optimized for instant clarity.</p>
@@ -147,16 +162,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
       </Section>
 
       {/* Trust */}
-      <Section className="my-12">
+      <Section className="my-12 relative z-10">
          <div className="flex flex-col md:flex-row gap-6 md:gap-12 justify-center">
-             <div className="flex items-center gap-4 p-6 bg-white/5 border border-white/5 rounded-sm w-full md:w-auto">
+             <div className="flex items-center gap-4 p-6 bg-white/5 border border-white/5 rounded-sm w-full md:w-auto backdrop-blur-sm">
                 <Eye className="text-gold w-8 h-8"/> 
                 <div>
                   <h3 className="font-bold text-white">Blindspot Detection</h3>
                   <p className="text-xs text-gray-400 uppercase tracking-wide">Reveals hidden structural flaws</p>
                 </div>
              </div>
-             <div className="flex items-center gap-4 p-6 bg-white/5 border border-white/5 rounded-sm w-full md:w-auto">
+             <div className="flex items-center gap-4 p-6 bg-white/5 border border-white/5 rounded-sm w-full md:w-auto backdrop-blur-sm">
                 <ShieldCheck className="text-gold w-8 h-8"/> 
                 <div>
                   <h3 className="font-bold text-white">Zero Retention</h3>
@@ -167,10 +182,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
       </Section>
 
       {/* Pricing */}
-      <Section className="text-center mb-20">
-        <div className="inline-block p-12 border border-gold/30 bg-gradient-to-b from-[#151515] to-obsidian relative max-w-lg w-full shadow-2xl shadow-black">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gold text-obsidian font-bold px-6 py-2 text-xs uppercase tracking-[0.2em]">
-            The Circle
+      <Section className="text-center mb-20 relative z-10">
+        <div className="inline-block p-12 border border-gold/30 bg-gradient-to-b from-[#151515] to-obsidian relative max-w-lg w-full shadow-2xl shadow-black backdrop-blur-xl">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gold text-obsidian font-bold px-6 py-2 text-xs uppercase tracking-[0.2em] whitespace-nowrap">
+            The Breakfear Protocol
           </div>
           <h3 className="text-6xl font-serif text-white mb-2 mt-4">$88<span className="text-xl text-gray-600 font-sans font-light">/mo</span></h3>
           <p className="text-gray-500 mb-10 text-sm uppercase tracking-widest">Full Membership</p>
@@ -183,7 +198,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
                 <span className="text-gold">✓</span> Monthly AMA with Creator
             </li>
             <li className="flex items-center gap-4 text-sm text-gray-300">
-                <span className="text-gold">✓</span> Private Community Access
+                <span className="text-gold">✓</span> Access to The Breakfear Protocol
             </li>
           </ul>
 
@@ -196,7 +211,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
         </div>
       </Section>
 
-      <footer className="py-12 text-center border-t border-white/5 text-gray-700 text-xs uppercase tracking-widest">
+      <footer className="py-12 text-center border-t border-white/5 text-gray-700 text-xs uppercase tracking-widest relative z-10">
         <p>&copy; {new Date().getFullYear()} Breakfear Decoder. Do not look away.</p>
       </footer>
     </div>

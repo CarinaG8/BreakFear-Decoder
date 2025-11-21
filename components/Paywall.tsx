@@ -65,8 +65,8 @@ export const Paywall: React.FC<PaywallProps> = ({ setAppState, userInfo }) => {
               <Users className="w-4 h-4 text-gold" />
             </div>
             <div>
-              <h4 className="text-white font-bold">The Protocol (Skool)</h4>
-              <p className="text-sm text-gray-500">The operational base. No victims. No excuses.</p>
+              <h4 className="text-white font-bold">The Breakfear Protocol</h4>
+              <p className="text-sm text-gray-500">Operational base for reality decoding. Not a support group. Stop healing. Start deciding.</p>
             </div>
           </div>
         </div>

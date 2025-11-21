@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AppState, DecoderResponse, UserInfo } from '../types';
 import { decodeFear } from '../services/geminiService';
-import { ArrowRight, RefreshCcw, Lock, ShieldAlert, Zap, Infinity, Terminal, AlertTriangle, Copy, Check, Share2, Users, Send } from 'lucide-react';
+import { ArrowRight, RefreshCcw, Lock, ShieldAlert, Zap, Infinity, Terminal, AlertTriangle, Copy, Check, Share2, Users, Send, Linkedin } from 'lucide-react';
 
 interface DecoderAppProps {
   setAppState: (state: AppState) => void;
@@ -25,6 +25,7 @@ export const DecoderApp: React.FC<DecoderAppProps> = ({ setAppState, userInfo })
   const [hasUsedFree, setHasUsedFree] = useState<boolean>(() => checkUsageHistory());
   const [placeholder, setPlaceholder] = useState('');
   const [copied, setCopied] = useState(false);
+  const [shareBtnText, setShareBtnText] = useState('Broadcast Truth');
   
   // Loading State Sequence
   const [loadingStep, setLoadingStep] = useState(0);
@@ -157,12 +158,37 @@ export const DecoderApp: React.FC<DecoderAppProps> = ({ setAppState, userInfo })
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleShare = () => {
+  const handleShare = async () => {
     if (!result) return;
-    // Viral Campaign Optimized Copy
-    const text = `My reality just got decoded by Breakfear.\n\nInsight: "${result.insight}"\n\nStop healing. Start deciding.\n\nTry the Protocol:`;
-    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(window.location.origin)}`;
-    window.open(url, '_blank');
+    
+    const text = `My reality just got decoded by Breakfear.\n\nInsight: "${result.insight}"\n\nStop healing. Start deciding.`;
+    const url = window.location.origin;
+
+    // 1. Try Native Web Share (Mobile/Supported Browsers)
+    if (navigator.share) {
+        try {
+            await navigator.share({
+                title: 'Breakfear Decoder',
+                text: `${text}\n\nTry the Protocol: ${url}`,
+                url: url,
+            });
+        } catch (err) {
+            // User cancelled
+        }
+    } else {
+        // 2. Fallback: Copy text to clipboard for LinkedIn/IG/YT
+        const copyText = `${text}\n\nTry the Protocol: ${url}`;
+        try {
+            await navigator.clipboard.writeText(copyText);
+            setShareBtnText("Copied for Socials");
+        } catch (err) {
+            setShareBtnText("Copy Failed");
+        }
+        
+        setTimeout(() => {
+            setShareBtnText("Broadcast Truth");
+        }, 2000);
+    }
   };
 
   const handleCommunity = () => {
@@ -206,7 +232,7 @@ export const DecoderApp: React.FC<DecoderAppProps> = ({ setAppState, userInfo })
                     onClick={handleCommunity}
                     className="flex items-center gap-2 text-[10px] uppercase tracking-widest px-3 py-1 rounded-sm border border-gold/40 bg-gold/10 hover:bg-gold hover:text-black text-gold transition-all shadow-[0_0_10px_rgba(212,175,55,0.1)]"
                 >
-                    <Users className="w-3 h-3" /> Access Protocol
+                    <Users className="w-3 h-3" /> Access Breakfear Protocol
                 </button>
             )}
         </div>
@@ -327,12 +353,13 @@ export const DecoderApp: React.FC<DecoderAppProps> = ({ setAppState, userInfo })
                 "{result.insight}"
               </h3>
               
-              {/* Viral Share Button Integrated into Card */}
+              {/* Smart Share Button Integrated into Card */}
               <button 
                 onClick={handleShare}
-                className="mt-6 flex items-center gap-2 text-[10px] uppercase tracking-widest text-gray-500 hover:text-blue-400 transition-colors border border-white/10 hover:border-blue-400/50 px-4 py-2 rounded-sm"
+                className="mt-6 flex items-center gap-2 text-[10px] uppercase tracking-widest text-gray-500 hover:text-blue-400 transition-colors border border-white/10 hover:border-blue-400/50 px-4 py-2 rounded-sm group"
               >
-                <Share2 className="w-3 h-3" /> Broadcast Truth
+                {shareBtnText === "Copied for Socials" ? <Check className="w-3 h-3" /> : <Share2 className="w-3 h-3 group-hover:text-blue-400" />} 
+                {shareBtnText}
               </button>
             </div>
 

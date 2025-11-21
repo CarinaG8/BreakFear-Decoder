@@ -109,7 +109,7 @@ export const WelcomeSequence: React.FC<WelcomeSequenceProps> = ({ userInfo, onCo
                   </div>
 
                   <p>You are no longer a passive observer of your life.</p>
-                  <p>Welcome to the Protocol.</p>
+                  <p>Welcome to The Breakfear Protocol.</p>
                   <p className="italic text-white">Do not look away.</p>
               </div>
 
