@@ -28,9 +28,11 @@ const responseSchema = {
   required: ["insight", "practicalTask", "followUpPrompt", "philosophicalLens", "isCrisis"],
 };
 
+// Initialize AI instance
+const getAI = () => new GoogleGenAI({ apiKey: process.env.API_KEY });
+
 export const decodeFear = async (fearInput: string): Promise<DecoderResponse> => {
-  // Initialize GoogleGenAI with process.env.API_KEY directly as per guidelines.
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = getAI();
 
   const systemPrompt = `
     You are Kayela Memory Core — the living memory of the Kayela ecosystem.
@@ -113,6 +115,46 @@ export const decodeFear = async (fearInput: string): Promise<DecoderResponse> =>
     }
   } catch (error) {
     console.error("Gemini decoding failed:", error);
+    throw error;
+  }
+};
+
+export const generateVisualArtifact = async (insight: string): Promise<string> => {
+  const ai = getAI();
+
+  // Constructing a prompt that enforces the Breakfear aesthetic
+  // Using the "Operational Alignment" style prompt logic
+  const imagePrompt = `
+    A cinematic, hyper-minimalist 3D render of a massive, jagged piece of black obsidian stone hovering in a void. 
+    A single, razor-sharp vertical line of glowing liquid gold slices perfectly through the center of the stone. 
+    The background is deep matte charcoal with faint digital static grain. 
+    Lighting is moody and dramatic, emphasizing texture and the sharp contrast. 
+    The image conceptually represents this insight: "${insight}".
+    8k resolution, architectural photography, operational aesthetic.
+  `;
+
+  try {
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash-image', // "Nana Banana" / Flash Image
+      contents: {
+        parts: [
+          { text: imagePrompt },
+        ],
+      },
+    });
+
+    // Iterate to find the image part
+    if (response.candidates && response.candidates[0].content.parts) {
+      for (const part of response.candidates[0].content.parts) {
+        if (part.inlineData) {
+          return `data:image/png;base64,${part.inlineData.data}`;
+        }
+      }
+    }
+    
+    throw new Error("No image data received from the frequency.");
+  } catch (error) {
+    console.error("Artifact generation failed:", error);
     throw error;
   }
 };

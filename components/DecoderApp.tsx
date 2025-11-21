@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AppState, DecoderResponse, UserInfo } from '../types';
-import { decodeFear } from '../services/geminiService';
-import { ArrowRight, RefreshCcw, Lock, ShieldAlert, Zap, Infinity, Terminal, AlertTriangle, Copy, Check, Share2, Users, Send, Linkedin } from 'lucide-react';
+import { decodeFear, generateVisualArtifact } from '../services/geminiService';
+import { ArrowRight, RefreshCcw, Lock, ShieldAlert, Zap, Infinity, Terminal, AlertTriangle, Copy, Check, Share2, Users, Send, Linkedin, Image as ImageIcon, Download, Loader2 } from 'lucide-react';
 
 interface DecoderAppProps {
   setAppState: (state: AppState) => void;
@@ -26,6 +26,10 @@ export const DecoderApp: React.FC<DecoderAppProps> = ({ setAppState, userInfo })
   const [placeholder, setPlaceholder] = useState('');
   const [copied, setCopied] = useState(false);
   const [shareBtnText, setShareBtnText] = useState('Broadcast Truth');
+  
+  // Image Gen State
+  const [generatingImage, setGeneratingImage] = useState(false);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
   
   // Loading State Sequence
   const [loadingStep, setLoadingStep] = useState(0);
@@ -120,6 +124,7 @@ export const DecoderApp: React.FC<DecoderAppProps> = ({ setAppState, userInfo })
 
     setLoading(true);
     setError('');
+    setImageUrl(null); // Reset image on new submit
     
     try {
       const response = await decodeFear(input);
@@ -136,10 +141,25 @@ export const DecoderApp: React.FC<DecoderAppProps> = ({ setAppState, userInfo })
     }
   };
 
+  const handleGenerateImage = async () => {
+    if (!result) return;
+    setGeneratingImage(true);
+    try {
+        const url = await generateVisualArtifact(result.insight);
+        setImageUrl(url);
+    } catch (err) {
+        console.error(err);
+        // Fail silently or show small error, keeping vibe intact
+    } finally {
+        setGeneratingImage(false);
+    }
+  };
+
   const handleReset = () => {
     if (result?.isCrisis) {
         setResult(null);
         setInput('');
+        setImageUrl(null);
         return;
     }
     if (hasUsedFree && !isPremium) {
@@ -147,6 +167,7 @@ export const DecoderApp: React.FC<DecoderAppProps> = ({ setAppState, userInfo })
     } else {
       setResult(null);
       setInput('');
+      setImageUrl(null);
     }
   };
 
@@ -192,8 +213,7 @@ export const DecoderApp: React.FC<DecoderAppProps> = ({ setAppState, userInfo })
   };
 
   const handleCommunity = () => {
-    // Replace this with your specific Skool link
-    window.open('https://skool.com', '_blank'); 
+    window.open('https://www.skool.com/the-protocol-8958', '_blank'); 
   };
 
   const getStatusIndicator = () => {
@@ -227,12 +247,19 @@ export const DecoderApp: React.FC<DecoderAppProps> = ({ setAppState, userInfo })
             <h1 className="text-lg font-serif font-bold tracking-widest text-white cursor-pointer hover:text-gold transition-colors" onClick={() => setAppState(AppState.LANDING)}>
             BREAKFEAR
             </h1>
-            {isPremium && (
+            {isPremium ? (
                 <button 
                     onClick={handleCommunity}
                     className="flex items-center gap-2 text-[10px] uppercase tracking-widest px-3 py-1 rounded-sm border border-gold/40 bg-gold/10 hover:bg-gold hover:text-black text-gold transition-all shadow-[0_0_10px_rgba(212,175,55,0.1)]"
                 >
-                    <Users className="w-3 h-3" /> Access Breakfear Protocol
+                    <Users className="w-3 h-3" /> Access Protocol
+                </button>
+            ) : (
+                <button 
+                    onClick={() => setAppState(AppState.PAYWALL)}
+                    className="flex items-center gap-2 text-[10px] uppercase tracking-widest px-3 py-1 rounded-sm border border-white/10 bg-white/5 text-gray-500 hover:border-gold/30 hover:text-gray-300 transition-all"
+                >
+                    <Lock className="w-3 h-3" /> Protocol Locked
                 </button>
             )}
         </div>
@@ -383,6 +410,56 @@ export const DecoderApp: React.FC<DecoderAppProps> = ({ setAppState, userInfo })
                   "{result.followUpPrompt}"
                 </p>
               </div>
+            </div>
+            
+            {/* Visual Artifact Generator */}
+            <div className="mt-8 border-t border-white/5 pt-8 animate-slide-up" style={{animationDelay: '0.7s'}}>
+                <div className="bg-black/40 border border-white/5 p-6 rounded-sm flex flex-col items-center justify-center text-center">
+                    <h4 className="text-gray-500 text-[10px] uppercase tracking-[0.3em] mb-4 flex items-center gap-2">
+                        <ImageIcon className="w-3 h-3" /> Visual Anchor
+                    </h4>
+                    
+                    {!imageUrl ? (
+                        <div className="w-full">
+                            <p className="text-gray-400 text-sm mb-6 max-w-md mx-auto">
+                                Materialize this insight into a visual artifact using the Breakfear aesthetic engine.
+                            </p>
+                            <button 
+                                onClick={handleGenerateImage}
+                                disabled={generatingImage}
+                                className="mx-auto px-6 py-2 bg-white/5 hover:bg-gold hover:text-obsidian border border-white/10 hover:border-gold transition-all uppercase text-[10px] tracking-[0.2em] font-bold flex items-center gap-2 disabled:opacity-50"
+                            >
+                                {generatingImage ? (
+                                    <>
+                                        <Loader2 className="w-3 h-3 animate-spin" /> Compiling Geometry...
+                                    </>
+                                ) : (
+                                    <>
+                                        <ImageIcon className="w-3 h-3" /> Materialize Artifact
+                                    </>
+                                )}
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="relative group w-full max-w-lg mx-auto animate-fade-in">
+                            <img 
+                                src={imageUrl} 
+                                alt="Visual Artifact" 
+                                className="w-full rounded-sm shadow-[0_0_30px_rgba(212,175,55,0.1)] border border-white/10"
+                            />
+                            <a 
+                                href={imageUrl} 
+                                download="breakfear-artifact.png"
+                                className="absolute top-4 right-4 p-2 bg-black/50 backdrop-blur-md text-white hover:text-gold border border-white/20 rounded-sm opacity-0 group-hover:opacity-100 transition-opacity"
+                            >
+                                <Download className="w-4 h-4" />
+                            </a>
+                            <p className="mt-4 text-[9px] text-gray-600 uppercase tracking-widest font-mono">
+                                Artifact Generated // gemini-2.5-flash-image
+                            </p>
+                        </div>
+                    )}
+                </div>
             </div>
 
             <div className="flex justify-center mt-16 animate-fade-in" style={{animationDelay: '1s'}}>

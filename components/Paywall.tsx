@@ -58,8 +58,8 @@ export const Paywall: React.FC<PaywallProps> = ({ setAppState, userInfo }) => {
             <div>
               <h4 className="text-white font-bold">Monthly Live Transmission</h4>
               <p className="text-sm text-gray-500 leading-relaxed mt-1">
-                Entropy is default. Without a signal, you drift back to comfort. We override the noise. Not a webinar—a synchronization of reality. 45m Deconstruction. 15m Rapid Fire. One hour. Hard stop.
-                <span className="text-gold block mt-2 font-mono text-xs uppercase tracking-widest">Operational Alignment // Dec 4 @ 0900 PST</span>
+                Entropy is the default state. Without a strong signal, you drift back to old stories. We override the noise. Not a webinar—a synchronization of reality. The Download (45m): Deconstructing fear. Rapid Fire (15m): Tactical dismantling. One hour. Hard stop.
+                <span className="text-gold block mt-2 font-mono text-xs uppercase tracking-widest">Operational Alignment // First Thursday @ 0900 PST</span>
               </p>
             </div>
           </div>
